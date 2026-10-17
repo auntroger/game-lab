@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <string.h>
 
+#include <6502.h>
+
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -25,17 +27,6 @@ typedef struct PACKED {
     uint8_t flags;
     char padding[9];
 } NESHeader;
-
-// General Purpose Registers
-int A; // Accumulator
-int X; // Index Register X
-int Y; // Index Register Y
-
-// Program Registers
-int PC; // Program Counter
-int SP; // Stack Pointer
-
-int P; // Status Register
 
 uint8_t* memoryBuffer;
 
@@ -80,9 +71,9 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
-    memoryBuffer = malloc(sizeof(uint8_t) * BYTES_TO_KB * 64); // Allocate 64kb of Memory simulating the 64kb memory in the 6502 chip
+    CPU6502* cpu = newCPU();
 
-    if (memoryBuffer == NULL) {
+    if (cpu == NULL) {
         printf("Insufficient memory to run the emulator. \n");
         printf("Try: \n");
         printf("  - Closing background apps \n");
@@ -93,9 +84,9 @@ int main(int argc, char* argv[]) {
 
     size_t size = sizeof(uint8_t) * BYTES_TO_KB * 16 * fileHeader.programROMcount; // Use 16kb per every 16kb chunk of program data
 
-    fread(memoryBuffer + 0x8000, size, 1, romPointer); // Pulls the program into the computers memory
+    fread(cpu->memory + 0x8000, size, 1, romPointer); // Pulls the program into the computers memory
 
-    free(memoryBuffer);
+    unactivateCPU(cpu);
 
     return 0;
 }
