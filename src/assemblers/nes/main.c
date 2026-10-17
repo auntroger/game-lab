@@ -27,8 +27,8 @@ typedef struct PACKED {
 } NESHeader;
 
 int main() {
-    char programData[2] = { 0xA9, 0x45 };
-    char padding[BYTES_TO_KB * 16 - 2] = { 0 };
+    char programData[4] = { 0xA9, 0x02, 0x69, 0x02 }; // Executes 2 + 2
+    char padding[BYTES_TO_KB * 16 - 4] = { 0 };
 
     NESHeader header;
     header.magic[0] = 'N';
@@ -41,7 +41,7 @@ int main() {
     header.flags = 0;
 
     FILE* file;
-    file = fopen("testPrograms/lia.nes", "wb");
+    file = fopen("testPrograms/tpt.nes", "wb");
 
     if (file == NULL) {
         printf("Failed to open file. \n");

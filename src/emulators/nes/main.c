@@ -86,6 +86,11 @@ int main(int argc, char* argv[]) {
 
     fread(cpu->memory + 0x8000, size, 1, romPointer); // Pulls the program into the computers memory
 
+    fetch(cpu);
+    fetch(cpu);
+
+    printf("%d", cpu->A);
+
     unactivateCPU(cpu);
 
     return 0;

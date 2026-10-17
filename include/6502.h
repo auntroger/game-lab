@@ -24,4 +24,7 @@ typedef struct {
 } CPU6502;
 
 CPU6502* newCPU();
+int fetch(CPU6502* cpu);
+int decode(CPU6502* cpu, uint8_t opcode);
+int execute(CPU6502* cpu, uint8_t opcode, uint16_t operands);
 void unactivateCPU(CPU6502* cpu);
